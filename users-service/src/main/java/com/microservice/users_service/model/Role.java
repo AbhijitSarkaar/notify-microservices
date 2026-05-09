@@ -1,17 +1,14 @@
+package com.microservice.users_service.model;
 
-package com.microservices.auth_service.model;
-
+import com.microservice.users_service.enums.AppRole;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "roles")
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class Role {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "role_id")
@@ -19,6 +16,6 @@ public class Role {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role_name")
-    private String roleName;
+    private AppRole roleName;
 
 }
