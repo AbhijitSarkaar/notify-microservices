@@ -1,4 +1,5 @@
-package com.microservice.users_service.payload;
+
+package com.microservices.auth_service.external;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,8 +12,8 @@ import java.util.List;
 @AllArgsConstructor
 public class UserDTO {
 
-    private Long userId;
     private String username;
+    private Long userId;
     private String email;
     private List<String> roles;
 

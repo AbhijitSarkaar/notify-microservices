@@ -5,6 +5,7 @@ import com.microservice.users_service.exception.response.CustomResponse;
 import com.microservice.users_service.model.Role;
 import com.microservice.users_service.model.User;
 import com.microservice.users_service.payload.LogInRequestDTO;
+import com.microservice.users_service.payload.UserDTO;
 import com.microservice.users_service.payload.UserRequestDTO;
 import com.microservice.users_service.repository.RoleRepository;
 import com.microservice.users_service.repository.UserRepository;
@@ -27,6 +28,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.WebUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -114,43 +116,32 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<?> getUserDetails(HttpServletRequest httpServletRequest) {
+    public UserDTO getUserDetails(HttpServletRequest httpServletRequest) {
+
         Cookie cookie = WebUtils.getCookie(httpServletRequest, jwtCookie);
         String token = cookie.getValue();
-
-        System.out.println(token);
-
-        System.out.println(":::getUserDetails:::");
 
         if (token != null && jwtUtils.validate(token)) {
             String username = jwtUtils.generateUsernameFromJwt(token);
             User user = userRepository.findByUsername(username)
-                    .orElseThrow(() -> new RuntimeException("Invalid token"));
+                    .orElseThrow(() -> new RuntimeException("User with username " + username + " not found"));
 
-            ResponseCookie cookie1 = ResponseCookie.from("X-USER-ID", user.getUserId().toString())
-                    .path("/api")
-                    .maxAge(12 * 60 * 60)
-                    .build();
+            UserDTO userDto = new UserDTO();
 
-            ResponseCookie cookie2 = ResponseCookie.from("X-USER-USERNAME", user.getUsername())
-                    .path("/api")
-                    .maxAge(12 * 60 * 60)
-                    .build();
+            userDto.setUserId(user.getUserId());
+            userDto.setUsername(user.getUsername());
+            userDto.setEmail(user.getEmail());
 
-            ResponseCookie cookie3 = ResponseCookie.from("X-USER-EMAIL", user.getEmail())
-                    .path("/api")
-                    .maxAge(12 * 60 * 60)
-                    .build();
+            List<String> roles = new ArrayList<>();
+            user.getRoles().forEach(role -> {
+                roles.add(role.getRoleName().name());
+            });
+            userDto.setRoles(roles);
 
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.SET_COOKIE, cookie1.toString())
-                    .header(HttpHeaders.SET_COOKIE, cookie2.toString())
-                    .header(HttpHeaders.SET_COOKIE, cookie3.toString())
-                    .body(null);
-
+            return userDto;
         }
 
-        return ResponseEntity.badRequest().body(null);
+        return null;
     }
 
 }

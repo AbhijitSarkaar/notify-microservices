@@ -1,7 +1,7 @@
 package com.microservices.auth_service.client;
 
+import com.microservices.auth_service.external.UserDTO;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 
@@ -11,5 +11,5 @@ import org.springframework.web.bind.annotation.RequestHeader;
 )
 public interface UserClient {
     @GetMapping("/api/users/verify")
-    ResponseEntity<?> verify(@RequestHeader("Cookie") String cookie);
+    UserDTO verify(@RequestHeader("Cookie") String cookie);
 }
