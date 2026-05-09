@@ -4,13 +4,19 @@ import com.microservice.users_service.exception.response.CustomResponse;
 import com.microservice.users_service.payload.LogInRequestDTO;
 import com.microservice.users_service.payload.UserRequestDTO;
 import com.microservice.users_service.service.UserService;
+import com.microservice.users_service.util.JwtUtils;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.WebUtils;
+
 
 @RestController
 @RequestMapping("/api/users")
@@ -18,6 +24,9 @@ public class UserController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    JwtUtils jwtUtils;
 
     @PostMapping("/register")
     public ResponseEntity<CustomResponse> register(@Valid @RequestBody UserRequestDTO userRequestDto) {
@@ -41,4 +50,8 @@ public class UserController {
                 .body(new CustomResponse("Logged out successfully"));
     }
 
+    @GetMapping("/verify")
+    public ResponseEntity<?> verify(HttpServletRequest httpServletRequest) {
+        return userService.getUserDetails(httpServletRequest);
+    }
 }

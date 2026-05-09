@@ -1,3 +1,4 @@
+
 package com.microservices.auth_service.config;
 
 import org.springframework.context.annotation.Bean;

@@ -40,7 +40,8 @@ public class JwtUtils {
 
     public ResponseCookie generateCookieFromJwt(String username) {
         return ResponseCookie.from(jwtCookie, generateJwtFromUsername(username))
-                .maxAge(24 * 60 * 60)
+                .path("/api")
+                .maxAge(12 * 60 * 60)
                 .httpOnly(false)
                 .build();
     }
@@ -49,4 +50,18 @@ public class JwtUtils {
         return ResponseCookie.from(jwtCookie, null)
                 .build();
     }
+
+    public String generateUsernameFromJwt(String token) {
+        return Jwts.parser().verifyWith((SecretKey) key()).build().parseSignedClaims(token).getPayload().getSubject();
+    }
+
+    public Boolean validate(String authToken) {
+        try {
+            Jwts.parser().verifyWith((SecretKey) key()).build().parseSignedClaims(authToken);
+            return true;
+        } catch(RuntimeException e) {}
+
+        return false;
+    }
+
 }

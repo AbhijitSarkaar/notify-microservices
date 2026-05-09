@@ -11,7 +11,10 @@ import com.microservice.users_service.repository.UserRepository;
 import com.microservice.users_service.security.service.UserDetailsImpl;
 import com.microservice.users_service.service.UserService;
 import com.microservice.users_service.util.JwtUtils;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -22,6 +25,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.WebUtils;
 
 import java.util.List;
 
@@ -42,6 +46,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     JwtUtils jwtUtils;
+
+    @Value("${jwtCookie}")
+    String jwtCookie;
 
     @Override
     public CustomResponse register(UserRequestDTO userRequestDto) {
@@ -104,6 +111,46 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseCookie logout() {
         return jwtUtils.cleanCookie();
+    }
+
+    @Override
+    public ResponseEntity<?> getUserDetails(HttpServletRequest httpServletRequest) {
+        Cookie cookie = WebUtils.getCookie(httpServletRequest, jwtCookie);
+        String token = cookie.getValue();
+
+        System.out.println(token);
+
+        System.out.println(":::getUserDetails:::");
+
+        if (token != null && jwtUtils.validate(token)) {
+            String username = jwtUtils.generateUsernameFromJwt(token);
+            User user = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new RuntimeException("Invalid token"));
+
+            ResponseCookie cookie1 = ResponseCookie.from("X-USER-ID", user.getUserId().toString())
+                    .path("/api")
+                    .maxAge(12 * 60 * 60)
+                    .build();
+
+            ResponseCookie cookie2 = ResponseCookie.from("X-USER-USERNAME", user.getUsername())
+                    .path("/api")
+                    .maxAge(12 * 60 * 60)
+                    .build();
+
+            ResponseCookie cookie3 = ResponseCookie.from("X-USER-EMAIL", user.getEmail())
+                    .path("/api")
+                    .maxAge(12 * 60 * 60)
+                    .build();
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.SET_COOKIE, cookie1.toString())
+                    .header(HttpHeaders.SET_COOKIE, cookie2.toString())
+                    .header(HttpHeaders.SET_COOKIE, cookie3.toString())
+                    .body(null);
+
+        }
+
+        return ResponseEntity.badRequest().body(null);
     }
 
 }
