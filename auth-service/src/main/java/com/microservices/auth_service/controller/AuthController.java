@@ -22,4 +22,5 @@ public class AuthController {
     public ResponseEntity<?> verify(HttpServletRequest httpServletRequest) {
         return authService.verify(httpServletRequest);
     }
+
 }

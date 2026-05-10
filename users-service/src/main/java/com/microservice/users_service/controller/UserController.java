@@ -1,7 +1,6 @@
 package com.microservice.users_service.controller;
 
 import com.microservice.users_service.exception.response.CustomResponse;
-import com.microservice.users_service.model.User;
 import com.microservice.users_service.payload.LogInRequestDTO;
 import com.microservice.users_service.payload.UserDTO;
 import com.microservice.users_service.payload.UserRequestDTO;
@@ -55,4 +54,5 @@ public class UserController {
                 HttpStatus.OK
         );
     }
+
 }
