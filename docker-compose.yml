@@ -70,7 +70,16 @@ services:
       db:
         condition: service_healthy
         restart: true 
-
+    
+  notification-service:
+    container_name: notification-service
+    build:
+      context: ./notification-service
+      dockerfile: Dockerfile
+    ports:
+      - "8084:8084"
+    networks: 
+      - notify-network
 
   gateway:
     container_name: gateway
@@ -86,6 +95,15 @@ services:
         condition: service_started
       users-service:
         condition: service_started
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3-management
+    ports: 
+      - "5672:5672"
+      - "15672:15672"
+    networks: 
+      - notify-network
 
 
 networks:
