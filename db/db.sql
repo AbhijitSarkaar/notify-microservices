@@ -1,4 +1,6 @@
 
+-- NOTIFY DB
+
 create database notify;
 use notify;
 
@@ -35,4 +37,16 @@ create table user_role(
     role_id int not null
 ); 
 
+
+
+-- NOTIFY_ORDER DB
+-- ORDERS TABLE
+
+create database notify_order;
+use notify_order;
+
+create table orders(
+	order_id bigint primary key auto_increment,
+    user_id bigint not null
+);
 
