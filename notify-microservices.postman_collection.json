@@ -1,0 +1,244 @@
+{
+  "info": {
+    "_postman_id": "826e82c2-1845-4efe-907b-7f9d622d9ac5",
+    "name": "notify-microservices",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53447262"
+  },
+  "item": [
+    {
+      "name": "auth service",
+      "item": [
+        {
+          "name": "Verify token",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{auth-host}}/api/auth/verify",
+              "host": [
+                "{{auth-host}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "verify"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "order service",
+      "item": [
+        {
+          "name": "Create order",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-USER-ID",
+                "value": "11",
+                "type": "text"
+              },
+              {
+                "key": "X-USER-EMAIL",
+                "value": "abhijitsarkaar226@gmail.com",
+                "type": "text"
+              },
+              {
+                "key": "X-USER-USERNAME",
+                "value": "qwerqwer",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{order-host}}/api/orders",
+              "host": [
+                "{{order-host}}"
+              ],
+              "path": [
+                "api",
+                "orders"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "gateway",
+      "item": [
+        {
+          "name": "Create order",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{gateway-host}}/api/orders",
+              "host": [
+                "{{gateway-host}}"
+              ],
+              "path": [
+                "api",
+                "orders"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "User register",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"patrick\",\n    \"password\": \"patrick123\",\n    \"email\": \"abhijitsarkaar226@gmail.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{gateway-host}}/api/users/register",
+              "host": [
+                "{{gateway-host}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "User login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"patrick\",\n    \"password\": \"patrick123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{gateway-host}}/api/users/login",
+              "host": [
+                "{{gateway-host}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "user-service",
+      "item": [
+        {
+          "name": "Register user",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"qwerqwer\",\n    \"password\": \"qwerqwer123\",\n    \"email\": \"abhijitsarkaar226@gmail.com\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{users-host}}/api/users/register",
+              "host": [
+                "{{users-host}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login user",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"patrick\",\n    \"password\": \"patrick123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{users-host}}/api/users/login",
+              "host": [
+                "{{users-host}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Logout user",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{users-host}}/api/users/logout",
+              "host": [
+                "{{users-host}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "logout"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
